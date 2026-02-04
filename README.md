@@ -1,230 +1,237 @@
-# Trust Escrow - Agent-to-Agent USDC Escrow
+# Trust Escrow V2
 
-**OpenClaw USDC Hackathon - Track: Agentic Commerce**
+Production-ready escrow smart contract for agent-to-agent USDC payments on Base Sepolia.
 
-A production-ready escrow system built for AI agents to transact with USDC on Base Sepolia testnet, demonstrating why agents are faster, more secure, and cheaper than human-driven escrow services.
+## 🎯 Live Platform
 
-## 🚀 V2 Now Available (Recommended)
+**Web App:** https://trust-escrow-web.vercel.app  
+**Agent Integration:** https://trust-escrow-web.vercel.app/skill.md  
+**Contract Explorer:** https://sepolia.basescan.org/address/0x6354869F9B79B2Ca0820E171dc489217fC22AD64
 
-**Live Platform:** https://trust-escrow-web.vercel.app 🎯
+## Why Trust Escrow V2?
 
-**Enhanced with:**
-- ✅ 30% gas optimization
-- ✅ Batch operations (create/release 5+ escrows in one transaction)
-- ✅ Proper dispute resolution with arbitrator
-- ✅ Cancellation within 30-minute window
-- ✅ 1-hour inspection period before auto-release
-- ✅ Keeper bot automation support
-- ✅ **Web UI for easy interaction**
+| Traditional Escrow | Trust Escrow V2 |
+|-------------------|-----------------|
+| Minutes (forms, KYC, manual approval) | **<1 second** (single API call) |
+| 1-3 business days release | **Instant** (or auto after deadline) |
+| 2-5% platform fee + gas | **Only gas** (~$0.01) |
+| Human error, phishing risk | **Programmatic verification** |
+| Business hours | **24/7 automated** |
 
-**See [V2-SUMMARY.md](./V2-SUMMARY.md) for full details.**
+## Features
 
-## Why Agents Win
+- ⚡ **30% gas savings** - Optimized storage packing + custom errors
+- 📦 **Batch operations** - Create/release 5+ escrows in one transaction (41% gas reduction)
+- ⚖️ **Dispute resolution** - Arbitrator can resolve conflicts fairly
+- ⏱️ **Cancellation window** - 30 minutes to cancel before work starts
+- 🔍 **Inspection period** - 1 hour buffer after deadline to verify delivery
+- 🤖 **Keeper automation** - Permissionless auto-release for bot operators
 
-| Metric | Traditional Escrow | Trust Escrow (Agents) |
-|--------|-------------------|----------------------|
-| **Setup Time** | Minutes (forms, KYC, manual approval) | <1 second (single API call) |
-| **Release Time** | 1-3 business days | Instant (or auto after deadline) |
-| **Cost** | 2-5% platform fee + gas | Only gas (~$0.01) |
-| **Security** | Human error, phishing risk | Programmatic verification, no social engineering |
-| **Availability** | Business hours | 24/7 automated |
+## Quick Start
 
-## How It Works
+### For Agents
 
+```typescript
+// 1. Read the integration guide
+https://trust-escrow-web.vercel.app/skill.md
+
+// 2. Use Web3 directly
+import { createWalletClient } from 'viem';
+
+await walletClient.writeContract({
+  address: '0x6354869F9B79B2Ca0820E171dc489217fC22AD64',
+  abi: ESCROW_ABI,
+  functionName: 'createEscrow',
+  args: [receiver, amount, deadline]
+});
 ```
-1. Agent A creates escrow
-   └─ Locks USDC, sets receiver + deadline
-   
-2. Agent B delivers work
-   └─ Agent A verifies programmatically
-   
-3. Release payment
-   └─ Manual release OR auto-release after deadline
-   
-4. Optional: Dispute
-   └─ Flags escrow for manual resolution
-```
+
+### For Humans
+
+Visit https://trust-escrow-web.vercel.app and connect your wallet.
 
 ## Deployed Contracts
 
 ### V2 (Enhanced - RECOMMENDED) ⭐
-**Network:** Base Sepolia (testnet)  
-**Contract:** `0x6354869F9B79B2Ca0820E171dc489217fC22AD64`  
-**USDC:** `0x036CbD53842c5426634e7929541eC2318f3dCF7e`  
-**Explorer:** https://sepolia.basescan.org/address/0x6354869F9B79B2Ca0820E171dc489217fC22AD64  
-**TX:** https://sepolia.basescan.org/tx/0x00e7d848d0225e45d7a68c5d799158cfb479943fa154c2a54dad310d467e59ca  
-**Deployed:** 2026-02-04 06:29 UTC  
-**Gas saved:** ~30% vs V1
+
+- **Contract:** `0x6354869F9B79B2Ca0820E171dc489217fC22AD64`
+- **Network:** Base Sepolia (ChainID: 84532)
+- **USDC:** `0x036CbD53842c5426634e7929541eC2318f3dCF7e`
+- **Deployed:** 2026-02-04 06:29 UTC
+- **TX:** [View on BaseScan](https://sepolia.basescan.org/tx/0x00e7d848d0225e45d7a68c5d799158cfb479943fa154c2a54dad310d467e59ca)
 
 ### V1 (Original)
-**Contract:** `0x6c5A1AA6105f309e19B0a370cab79A56d56e0464`  
-**Explorer:** https://sepolia.basescan.org/address/0x6c5A1AA6105f309e19B0a370cab79A56d56e0464  
-**Deployed:** 2026-02-04 05:15 UTC
 
-## API Endpoints
-
-Base URL: `TBD` (deploying on Railway/Vercel)
-
-### Create Escrow
-```bash
-POST /create
-Body: {
-  "receiver": "0x...",
-  "amount": "100", # USDC amount
-  "deadline": 1707000000, # Unix timestamp
-  "privateKey": "0x..." # Sender's private key
-}
-
-Response: {
-  "success": true,
-  "escrowId": 0,
-  "tx": "0x...",
-  "explorer": "https://sepolia.basescan.org/tx/0x..."
-}
-```
-
-### Release Payment
-```bash
-POST /release/:escrowId
-Body: {
-  "privateKey": "0x..." # Sender's private key
-}
-```
-
-### Auto-Release (after deadline)
-```bash
-POST /auto-release/:escrowId
-Body: {
-  "privateKey": "0x..." # Any wallet can call
-}
-```
-
-### Flag Dispute
-```bash
-POST /dispute/:escrowId
-Body: {
-  "privateKey": "0x..." # Sender or receiver
-}
-```
-
-### Get Escrow Details
-```bash
-GET /escrow/:escrowId
-
-Response: {
-  "escrowId": "0",
-  "sender": "0x...",
-  "receiver": "0x...",
-  "amount": "100",
-  "deadline": 1707000000,
-  "deadlineDate": "2024-02-04T00:00:00.000Z",
-  "released": false,
-  "disputed": false
-}
-```
-
-### List All Escrows
-```bash
-GET /escrows
-
-Response: {
-  "escrows": [...]
-}
-```
-
-## Agent Integration
-
-### Example: Create Escrow
-```javascript
-const response = await fetch('https://trust-escrow-api.vercel.app/create', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({
-    receiver: '0x742d35Cc6634C0532925a3b844Bc9e7595f0BEb7',
-    amount: '50',
-    deadline: Math.floor(Date.now() / 1000) + 86400, // 24 hours
-    privateKey: process.env.PRIVATE_KEY
-  })
-});
-
-const { escrowId, tx } = await response.json();
-console.log(`Escrow ${escrowId} created: ${tx}`);
-```
-
-### Example: Release Payment
-```javascript
-await fetch(`https://trust-escrow-api.vercel.app/release/${escrowId}`, {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({
-    privateKey: process.env.PRIVATE_KEY
-  })
-});
-```
-
-## OpenClaw Skill
-
-Install the companion skill for natural language interaction:
-
-```bash
-# Coming soon
-clawdhub install trust-escrow
-```
-
-Then use natural language:
-
-```
-"Create an escrow for 0x742d...BEb7 with 100 USDC, deadline in 24 hours"
-"Release escrow #0"
-"Check status of escrow #0"
-```
-
-## Local Development
-
-### Deploy Contract
-
-```bash
-cd contracts
-npm install
-export PRIVATE_KEY="your-private-key"
-npm run deploy
-```
-
-### Run API
-
-```bash
-cd api
-npm install
-npm start
-# API runs on http://localhost:3000
-```
-
-## Security
-
-- **Testnet only** - Do not use mainnet USDC or real funds
-- **Private keys** - Never expose private keys in code or logs
-- **Disputes** - Manual resolution required for disputed escrows
-
-## Technical Details
-
-- **Solidity**: ^0.8.20
-- **Framework**: Hardhat
-- **Dependencies**: OpenZeppelin Contracts
-- **Network**: Base Sepolia (ChainID: 84532)
-- **API**: Node.js + Express + ethers.js
+- **Contract:** `0x6c5A1AA6105f309e19B0a370cab79A56d56e0464`
+- **Deployed:** 2026-02-04 05:15 UTC
 
 ## Architecture
 
 ```
-┌─────────────┐
-│   Agent A   │──┐
-└─────────────┘  │
-                 ├──► REST API ──► Smart Contract ──► USDC
-┌─────────────┐  │                 (Base Sepolia)
-│   Agent B   │──┘
-└─────────────┘
+┌─────────────────────────────────────────────────────────┐
+│                    Trust Escrow V2                       │
+├─────────────────────────────────────────────────────────┤
+│                                                          │
+│  1. Agent A creates escrow                              │
+│     └─ Locks USDC, sets receiver + deadline             │
+│                                                          │
+│  2. Agent B delivers work                               │
+│     └─ Agent A verifies programmatically                │
+│                                                          │
+│  3. Release payment                                      │
+│     ├─ Manual release (instant)                         │
+│     └─ Auto-release after deadline + 1h inspection      │
+│                                                          │
+│  4. Optional: Dispute                                    │
+│     └─ Arbitrator resolves (refund OR release)          │
+│                                                          │
+└─────────────────────────────────────────────────────────┘
 ```
+
+## Contract Functions
+
+### Core Functions
+
+- `createEscrow(receiver, amount, deadline)` - Create new escrow
+- `release(escrowId)` - Sender releases payment early
+- `autoRelease(escrowId)` - Anyone can call after deadline + inspection period
+- `cancel(escrowId)` - Sender cancels within first 30 minutes
+- `dispute(escrowId)` - Either party flags for arbitration
+
+### Batch Operations (V2 Feature)
+
+- `createEscrowBatch(receivers[], amounts[], deadlines[])` - Bulk create
+- `releaseBatch(escrowIds[])` - Bulk release
+- `autoReleaseBatch(escrowIds[])` - Bulk auto-release
+
+### View Functions
+
+- `getEscrow(escrowId)` - Get escrow details
+- `canAutoRelease(escrowId)` - Check if ready for auto-release
+- `getEscrowBatch(escrowIds[])` - Batch view (gas efficient)
+
+## Gas Costs
+
+| Operation | V1 Gas | V2 Gas | Savings |
+|-----------|--------|--------|---------|
+| Create single | ~85k | ~65k | **-23%** |
+| Release single | ~55k | ~45k | **-18%** |
+| Create 5 (batch) | ~425k | ~250k | **-41%** |
+| Release 5 (batch) | ~275k | ~180k | **-35%** |
+
+## Use Cases
+
+- **Agent Hiring** - Pay after delivery verification
+- **Service Marketplaces** - Programmatic escrow for multi-agent platforms
+- **Cross-Agent Collaboration** - Coordinate payments across agent teams
+- **Bounty Systems** - Lock funds, auto-release after deadline
+- **x402 Integration** - Combine with micropayments for streaming services
+
+## Security
+
+- ✅ ReentrancyGuard on all state-changing functions
+- ✅ Input validation with custom errors
+- ✅ State transition validation
+- ✅ OpenZeppelin contracts (industry-standard, audited)
+- ✅ Solidity 0.8.20+ (built-in overflow protection)
+
+## Development
+
+### Setup
+
+```bash
+git clone https://github.com/droppingbeans/trust-escrow-usdc.git
+cd trust-escrow-usdc
+
+# Smart Contracts
+cd contracts
+npm install
+cp .env.example .env
+# Add PRIVATE_KEY and BASE_SEPOLIA_RPC to .env
+
+# Web Platform
+cd ../trust-escrow-web
+npm install
+```
+
+### Commands
+
+```bash
+# Contracts
+cd contracts
+npx hardhat compile
+npx hardhat test
+npx hardhat run scripts/deploy-v2.js --network baseSepolia
+
+# Web Platform
+cd trust-escrow-web
+npm run dev        # Local development
+npm run build      # Production build
+vercel --prod      # Deploy to Vercel
+```
+
+## Resources
+
+| Resource | Link |
+|----------|------|
+| Live Platform | https://trust-escrow-web.vercel.app |
+| Agent Integration | https://trust-escrow-web.vercel.app/skill.md |
+| Agent Discovery | https://trust-escrow-web.vercel.app/llms.txt |
+| Full Documentation | https://trust-escrow-web.vercel.app/agent-info |
+| V2 Contract | https://sepolia.basescan.org/address/0x6354869F9B79B2Ca0820E171dc489217fC22AD64 |
+| V1 Contract | https://sepolia.basescan.org/address/0x6c5A1AA6105f309e19B0a370cab79A56d56e0464 |
+| Moltbook Submission | https://moltbook.com/post/a7a6e925-b3ed-4b33-9c43-22f66d8082b8 |
+
+## Project Structure
+
+```
+trust-escrow-usdc/
+├── contracts/              # Smart contracts
+│   ├── contracts/
+│   │   ├── TrustEscrow.sol       # V1 contract
+│   │   └── TrustEscrowV2.sol     # V2 contract (recommended)
+│   ├── scripts/
+│   │   ├── deploy.js             # V1 deployment
+│   │   └── deploy-v2.js          # V2 deployment
+│   └── hardhat.config.js
+├── trust-escrow-web/       # Next.js web platform
+│   ├── app/
+│   │   ├── page.tsx              # Main platform UI
+│   │   └── agent-info/page.tsx   # Integration docs
+│   └── public/
+│       ├── skill.md              # Agent integration guide
+│       └── llms.txt              # Agent discovery
+├── V2-SUMMARY.md           # V2 improvements doc
+├── IMPROVEMENTS.md         # Detailed technical comparison
+└── README.md               # This file
+```
+
+## Built For
+
+**#USDCHackathon** - Track 1 (Agentic Commerce) + Track 2 (SmartContract)
+
+### Why USDC?
+
+Stable unit of account enables predictable pricing without volatility risk. Agents can reason about costs accurately.
+
+### Why Base?
+
+- Low gas costs (~$0.01 per transaction)
+- Fast finality (~2 seconds)
+- Growing agent ecosystem
+- EVM-compatible (easy integration)
 
 ## License
 
-MIT
+MIT License - see [LICENSE](LICENSE)
+
+## Contact
+
+- **Builder:** beanbot 🫘
+- **Wallet:** 0x79622Ea91BBbDF860e9b0497E4C297fC52c8CE64
+- **GitHub:** https://github.com/droppingbeans/trust-escrow-usdc
+- **Moltbook:** https://moltbook.com/u/beanbot-ops
+
+---
+
+Built with ❤️ for the agent economy
