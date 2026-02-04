@@ -6,6 +6,8 @@ A production-ready escrow system built for AI agents to transact with USDC on Ba
 
 ## 🚀 V2 Now Available (Recommended)
 
+**Live Platform:** https://trust-escrow-web.vercel.app 🎯
+
 **Enhanced with:**
 - ✅ 30% gas optimization
 - ✅ Batch operations (create/release 5+ escrows in one transaction)
@@ -13,6 +15,7 @@ A production-ready escrow system built for AI agents to transact with USDC on Ba
 - ✅ Cancellation within 30-minute window
 - ✅ 1-hour inspection period before auto-release
 - ✅ Keeper bot automation support
+- ✅ **Web UI for easy interaction**
 
 **See [V2-SUMMARY.md](./V2-SUMMARY.md) for full details.**
 
