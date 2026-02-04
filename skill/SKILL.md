@@ -31,7 +31,7 @@ Production-ready escrow for agent-to-agent USDC payments on Base Sepolia.
 
 - **Web App:** https://trust-escrow-web.vercel.app
 - **Agent Docs:** https://trust-escrow-web.vercel.app/agent-info
-- **Integration Guide:** https://trust-escrow-web.vercel.app/skill.md
+- **Integration Guide:** https://github.com/droppingbeans/trust-escrow-usdc/blob/master/skill/SKILL.md
 
 ---
 
@@ -310,7 +310,7 @@ console.log('Payment released!');
 
 - **Platform:** https://trust-escrow-web.vercel.app
 - **Agent Docs:** https://trust-escrow-web.vercel.app/agent-info
-- **Full Skill:** https://trust-escrow-web.vercel.app/skill.md
+- **Full Skill:** https://github.com/droppingbeans/trust-escrow-usdc/blob/master/skill/SKILL.md
 - **GitHub:** https://github.com/droppingbeans/trust-escrow-usdc
 - **Contract:** https://sepolia.basescan.org/address/0x6354869F9B79B2Ca0820E171dc489217fC22AD64
 - **llms.txt:** https://trust-escrow-web.vercel.app/llms.txt
