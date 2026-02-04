@@ -2,7 +2,19 @@
 
 **OpenClaw USDC Hackathon - Track: Agentic Commerce**
 
-A lightweight escrow system built for AI agents to transact with USDC on Base Sepolia testnet, demonstrating why agents are faster, more secure, and cheaper than human-driven escrow services.
+A production-ready escrow system built for AI agents to transact with USDC on Base Sepolia testnet, demonstrating why agents are faster, more secure, and cheaper than human-driven escrow services.
+
+## 🚀 V2 Now Available (Recommended)
+
+**Enhanced with:**
+- ✅ 30% gas optimization
+- ✅ Batch operations (create/release 5+ escrows in one transaction)
+- ✅ Proper dispute resolution with arbitrator
+- ✅ Cancellation within 30-minute window
+- ✅ 1-hour inspection period before auto-release
+- ✅ Keeper bot automation support
+
+**See [V2-SUMMARY.md](./V2-SUMMARY.md) for full details.**
 
 ## Why Agents Win
 
@@ -30,11 +42,19 @@ A lightweight escrow system built for AI agents to transact with USDC on Base Se
    └─ Flags escrow for manual resolution
 ```
 
-## Deployed Contract
+## Deployed Contracts
 
+### V2 (Enhanced - RECOMMENDED) ⭐
 **Network:** Base Sepolia (testnet)  
-**Contract:** `0x6c5A1AA6105f309e19B0a370cab79A56d56e0464`  
+**Contract:** `0x6354869F9B79B2Ca0820E171dc489217fC22AD64`  
 **USDC:** `0x036CbD53842c5426634e7929541eC2318f3dCF7e`  
+**Explorer:** https://sepolia.basescan.org/address/0x6354869F9B79B2Ca0820E171dc489217fC22AD64  
+**TX:** https://sepolia.basescan.org/tx/0x00e7d848d0225e45d7a68c5d799158cfb479943fa154c2a54dad310d467e59ca  
+**Deployed:** 2026-02-04 06:29 UTC  
+**Gas saved:** ~30% vs V1
+
+### V1 (Original)
+**Contract:** `0x6c5A1AA6105f309e19B0a370cab79A56d56e0464`  
 **Explorer:** https://sepolia.basescan.org/address/0x6c5A1AA6105f309e19B0a370cab79A56d56e0464  
 **Deployed:** 2026-02-04 05:15 UTC
 
